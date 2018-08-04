@@ -158,7 +158,16 @@ function refresh_hints() {
 
 function exec_build() {
 
+    cd ..
+
+    make -C src/ocaml-output -j $threads &&
+    make -C ulib/ml -j $threads &&
+    OTHERFLAGS='--admit_smt_queries true' make -C fstar/ulib -j $threads
+
+    cd mitls-fstar
+
     export_home FSTAR "$(pwd)/../"
+
     result_file=result.txt
     local status_file="status.txt"
     echo -n false >$status_file
